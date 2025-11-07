@@ -1,7 +1,7 @@
 import csv
 import os
 
-# --- Constantes Globales (solo lectura) ---
+# Constantes Globales (solo lectura)
 ARCHIVO_DATOS = 'paises.csv'
 CAMPOS_CSV = ['nombre', 'poblacion', 'superficie', 'continente']
 
@@ -17,7 +17,7 @@ DATOS_BASE = [
     ['India', 1380004385, 3287263, 'Asia']
 ]
 
-# --- Funciones de Utilidad y Validación (Sin Excepciones) ---
+# Funciones de Utilidad y Validación
 
 def limpiar_pantalla():
     """Limpia la pantalla de la consola."""
@@ -67,12 +67,12 @@ def mostrar_paises(lista_paises):
         print("\nNo se encontraron países que coincidan con la búsqueda.")
         return
     
-    print(f"\n--- {len(lista_paises)} Países Encontrados ---")
+    print(f"\n----- {len(lista_paises)} Países Encontrados ---")
     for pais in lista_paises:
         print(formatear_pais(pais))
     print("---------------------------------")
 
-# --- Funciones para Ordenamiento (Reemplazo de Lambdas) ---
+# Funciones para Ordenamiento
 
 def obtener_nombre(pais):
     """Devuelve el nombre de un país (para usar en 'key' de sorted)."""
@@ -86,7 +86,7 @@ def obtener_superficie(pais):
     """Devuelve la superficie de un país (para usar en 'key' de sorted)."""
     return pais['superficie']
 
-# --- Funciones de Carga y Guardado (Sin Excepciones) ---
+# Funciones de Carga y Guardado
 
 def inicializar_datos():
     """
@@ -152,11 +152,11 @@ def guardar_datos(archivo, paises):
         writer.writerows(paises) # Escribe todos los datos
     print(f"Datos guardados exitosamente en '{archivo}'.")
 
-# --- Funcionalidades del Menú ---
+# Funcionalidades del Menú
 
 def agregar_pais(paises):
     """Agrega un nuevo país a la lista."""
-    print("--- 1. Agregar País ---")
+    print("----- 1. Agregar País -----")
     nombre = validar_string_no_vacio("Nombre del país: ").capitalize()
     
     # Validar que el país no exista ya
@@ -179,7 +179,7 @@ def agregar_pais(paises):
 
 def actualizar_pais(paises):
     """Actualiza la población y superficie de un país existente."""
-    print("--- 2. Actualizar País ---")
+    print("----- 2. Actualizar País -----")
     nombre = validar_string_no_vacio("Ingrese el nombre del país a actualizar: ")
     
     pais_encontrado = buscar_pais_por_nombre(paises, nombre)
@@ -212,7 +212,7 @@ def actualizar_pais(paises):
 
 def buscar_pais(paises):
     """Busca países por coincidencia parcial o exacta."""
-    print("--- 3. Buscar País por Nombre ---")
+    print("----- 3. Buscar País por Nombre -----")
     termino = validar_string_no_vacio("Ingrese el nombre (o parte) a buscar: ").lower()
     
     resultados = []
@@ -224,7 +224,7 @@ def buscar_pais(paises):
 
 def filtrar_paises(paises):
     """Filtra países por continente, rango de población o superficie."""
-    print("--- 4. Filtrar Países ---")
+    print("----- 4. Filtrar Países -----")
     print("Opciones de filtro:")
     print("  1. Por Continente")
     print("  2. Por Rango de Población")
@@ -269,7 +269,7 @@ def filtrar_paises(paises):
 
 def ordenar_paises(paises):
     """Ordena la lista de países por el criterio y orden seleccionados."""
-    print("--- 5. Ordenar Países ---")
+    print("----- 5. Ordenar Países -----")
     print("Criterio de orden:")
     print("  1. Nombre")
     print("  2. Población")
@@ -295,13 +295,13 @@ def ordenar_paises(paises):
     # Asignamos la FUNCIÓN adecuada
     if criterio == '1':
         clave_orden = obtener_nombre
-        print("\n--- Países ordenados por Nombre ---")
+        print("\n----- Países ordenados por Nombre -----")
     elif criterio == '2':
         clave_orden = obtener_poblacion
-        print("\n--- Países ordenados por Población ---")
+        print("\n----- Países ordenados por Población -----")
     else: # criterio == '3'
         clave_orden = obtener_superficie
-        print("\n--- Países ordenados por Superficie ---")
+        print("\n----- Países ordenados por Superficie -----")
 
     # Creamos una *nueva* lista ordenada (sorted)
     # y le pasamos el nombre de nuestra función en 'key'
@@ -311,7 +311,7 @@ def ordenar_paises(paises):
 
 def mostrar_estadisticas(paises):
     """Calcula y muestra estadísticas clave sobre los datos."""
-    print("--- 6. Mostrar Estadísticas ---")
+    print("----- 6. Mostrar Estadísticas -----")
     
     if not paises:
         print("No hay datos para calcular estadísticas.")
@@ -321,7 +321,7 @@ def mostrar_estadisticas(paises):
     pais_max_pob = max(paises, key=obtener_poblacion)
     pais_min_pob = min(paises, key=obtener_poblacion)
     
-    print("\n📊 Población:")
+    print("\nPoblación:")
     print(f"  Mayor población: {pais_max_pob['nombre']} ({pais_max_pob['poblacion']:,} hab.)")
     print(f"  Menor población: {pais_min_pob['nombre']} ({pais_min_pob['poblacion']:,} hab.)")
 
@@ -330,18 +330,18 @@ def mostrar_estadisticas(paises):
     for p in paises:
         total_poblacion += p['poblacion']
     promedio_poblacion = total_poblacion / len(paises)
-    print(f"  Población promedio: {promedio_poblacion:,.2f} hab.")
+    print(f"Población promedio: {promedio_poblacion:,.2f} hab.")
 
     # 3. Promedio de superficie
     total_superficie = 0
     for p in paises:
         total_superficie += p['superficie']
     promedio_superficie = total_superficie / len(paises)
-    print(f"\n🗺 Superficie:")
-    print(f"  Superficie promedio: {promedio_superficie:,.2f} km²")
+    print(f"\nSuperficie:")
+    print(f" Superficie promedio: {promedio_superficie:,.2f} km²")
 
     # 4. Cantidad de países por continente
-    print("\n🌍 Países por Continente:")
+    print("\nPaíses por Continente:")
     conteo_continentes = {}
     for pais in paises:
         continente = pais['continente']
@@ -352,13 +352,13 @@ def mostrar_estadisticas(paises):
     for continente, cantidad in conteo_continentes.items():
         print(f"  - {continente}: {cantidad} país(es)")
 
-# --- Función Principal (Main) ---
+# Función Principal (Main)
 
 def mostrar_menu():
     """Muestra el menú principal de opciones."""
     limpiar_pantalla()
     print("========================================")
-    print(" 🗺  Sistema de Gestión de Países 🗺")
+    print("Sistema de Gestión de Países")
     print("========================================")
     print(" 1. Agregar País")
     print(" 2. Actualizar Datos de País")
