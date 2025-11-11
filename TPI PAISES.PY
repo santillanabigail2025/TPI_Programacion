@@ -12,6 +12,7 @@ DATOS_BASE = [
     ['Brasil', 213993437, 8515767, 'América'],
     ['Alemania', 83149300, 357022, 'Europa'],
     ['Egipto', 102334404, 1002450, 'África'],
+    
     ['Australia', 25687041, 7692024, 'Oceanía'],
     ['Rusia', 145934462, 17098242, 'Europa'],
     ['India', 1380004385, 3287263, 'Asia']
@@ -46,13 +47,25 @@ def pausar():
     """Pausa la ejecución hasta que el usuario presione Enter."""
     input("\nPresione Enter para continuar...")
 
+def normalizar_string(texto):
+    """Convierte a minúsculas y quita acentos comunes."""
+    texto = texto.lower()
+    # Reemplazos manuales de acentos comunes
+    texto = texto.replace('á', 'a')
+    texto = texto.replace('é', 'e')
+    texto = texto.replace('í', 'i')
+    texto = texto.replace('ó', 'o')
+    texto = texto.replace('ú', 'u')
+    texto = texto.replace('ü', 'u')
+    return texto
+
 def buscar_pais_por_nombre(paises, nombre):
-    """Busca un país por nombre exacto (ignorando mayúsculas/minúsculas)."""
-    nombre_lower = nombre.lower()
+    """Busca un país por nombre exacto (ignora mayúsculas y acentos)."""
+    nombre_normalizado = normalizar_string(nombre)
     for pais in paises:
-        if pais['nombre'].lower() == nombre_lower:
+        if normalizar_string(pais['nombre']) == nombre_normalizado:
             return pais
-    return None # Devuelve None si no encuentra nada
+    return None
 
 def formatear_pais(pais):
     """Devuelve un string formateado con los datos de un país."""
@@ -103,7 +116,7 @@ def inicializar_datos():
         print("Archivo creado exitosamente.")
 
 def cargar_datos(archivo):
-    """Carga los datos de países desde un archivo CSV (sin try/except)."""
+    """Carga los datos de países desde un archivo CSV"""
     paises = []
     
     # Si el archivo no existe (aunque inicializar_datos ya lo creó)
@@ -145,7 +158,7 @@ def cargar_datos(archivo):
     return paises
 
 def guardar_datos(archivo, paises):
-    """Guarda la lista de países en el archivo CSV (sin try/except)."""
+    """Guarda la lista de países en el archivo CSV."""
     with open(archivo, mode='w', encoding='utf-8', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=CAMPOS_CSV)
         writer.writeheader() # Escribe la cabecera
@@ -211,13 +224,13 @@ def actualizar_pais(paises):
         print("Error: País no encontrado.")
 
 def buscar_pais(paises):
-    """Busca países por coincidencia parcial o exacta."""
+    """Busca países por coincidencia parcial (ignora mayúsculas y acentos)."""
     print("----- 3. Buscar País por Nombre -----")
-    termino = validar_string_no_vacio("Ingrese el nombre (o parte) a buscar: ").lower()
+    termino_normalizado = normalizar_string(validar_string_no_vacio("Ingrese el nombre (o parte) a buscar: "))
     
     resultados = []
     for pais in paises:
-        if termino in pais['nombre'].lower():
+        if termino_normalizado in normalizar_string(pais['nombre']):
             resultados.append(pais)
             
     mostrar_paises(resultados)
@@ -233,10 +246,11 @@ def filtrar_paises(paises):
 
     resultados = []
     if opcion == '1':
-        continente = validar_string_no_vacio("Ingrese el continente: ").lower()
+        continente_input = validar_string_no_vacio("Ingrese el continente: ")
+        continente_normalizado = normalizar_string(continente_input)
         # Usamos un bucle for normal para el filtro
         for p in paises:
-            if p['continente'].lower() == continente:
+           if normalizar_string(p['continente']) == continente_normalizado:
                 resultados.append(p)
     
     elif opcion == '2':
